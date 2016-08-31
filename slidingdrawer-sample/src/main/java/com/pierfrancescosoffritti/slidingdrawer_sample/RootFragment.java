@@ -1,9 +1,7 @@
 package com.pierfrancescosoffritti.slidingdrawer_sample;
 
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -12,23 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pierfrancescosoffritti.slidingdrawer.SlidingDrawer;
 import com.pierfrancescosoffritti.slidingdrawer_sample.adapters.ViewPagerAdapter;
 import com.pierfrancescosoffritti.utils.FragmentsUtils;
 
-public class RootFragment extends Fragment implements SlidingDrawer.OnSlideListener {
+public class RootFragment extends Fragment {
 
     private final static String TAG_1 = "TAG_1";
     private final static String TAG_2 = "TAG_2";
-
+    private final static String TAG_3 = "TAG_3";
     private ViewPagerAdapter viewPagerAdapter;
-
-    private View collapsedView;
-    private View expandedView;
-
     private TabLayout tabLayout;
-
-    @Nullable private SlidingDrawerContainer slidingDrawerContainer;
 
     public RootFragment() {
     }
@@ -46,34 +37,27 @@ public class RootFragment extends Fragment implements SlidingDrawer.OnSlideListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_root, container, false);
 
-        collapsedView = view.findViewById(R.id.sliding_drawer_collapsed_view);
-        expandedView = view.findViewById(R.id.expanded_view);
-
         tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
 
         Fragment listFragment1;
         Fragment listFragment2;
+        Fragment listFragment3;
 
         if(savedInstanceState == null) {
-            listFragment1 = FragmentsUtils.findFragment(getChildFragmentManager(), ListFragment.newInstance(1), null);
-            listFragment2 = FragmentsUtils.findFragment(getChildFragmentManager(), ListFragment.newInstance(2), null);
+            listFragment1 = FragmentsUtils.findFragment(getChildFragmentManager(), new NowFragment(), null);
+            listFragment2 = FragmentsUtils.findFragment(getChildFragmentManager(), new RecentFragment(), null);
+            listFragment3 = FragmentsUtils.findFragment(getChildFragmentManager(), new ContactsFragment(), null);
         } else {
             String tag0 = savedInstanceState.getString(TAG_1);
             String tag1 = savedInstanceState.getString(TAG_2);
+            String tag2 = savedInstanceState.getString(TAG_3);
 
-            listFragment1 = FragmentsUtils.findFragment(getChildFragmentManager(), ListFragment.newInstance(1), tag0);
-            listFragment2 = FragmentsUtils.findFragment(getChildFragmentManager(), ListFragment.newInstance(2), tag1);
+            listFragment1 = FragmentsUtils.findFragment(getChildFragmentManager(), new NowFragment(), tag0);
+            listFragment2 = FragmentsUtils.findFragment(getChildFragmentManager(), new RecentFragment(), tag1);
+            listFragment3 = FragmentsUtils.findFragment(getChildFragmentManager(), new ContactsFragment(), tag2);
         }
 
-        setupViewPager(
-                view,
-                tabLayout,
-                new Pair<>(listFragment1, "name1"),
-                new Pair<>(listFragment2, "name2")
-        );
-
-        assert slidingDrawerContainer != null;
-        slidingDrawerContainer.setDragView(collapsedView);
+        setupViewPager(view, tabLayout, new Pair<>(listFragment1, "Now"), new Pair<>(listFragment2, "Recent"), new Pair<>(listFragment3, "Contacts"));
 
         return view;
     }
@@ -85,21 +69,23 @@ public class RootFragment extends Fragment implements SlidingDrawer.OnSlideListe
         if(viewPagerAdapter != null) {
             outState.putString(TAG_1, viewPagerAdapter.getItem(0).getTag());
             outState.putString(TAG_2, viewPagerAdapter.getItem(1).getTag());
+            outState.putString(TAG_3, viewPagerAdapter.getItem(2).getTag());
         } else {
             outState.putString(TAG_1, TAG_1);
             outState.putString(TAG_2, TAG_2);
+            outState.putString(TAG_3, TAG_3);
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof SlidingDrawerContainer) {
-            slidingDrawerContainer = (SlidingDrawerContainer) context;
-        } else {
-            throw new RuntimeException(context.getClass().getSimpleName() +" must implement " +SlidingDrawerContainer.class.getSimpleName());
-        }
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof SlidingDrawerContainer) {
+//            slidingDrawerContainer = (SlidingDrawerContainer) context;
+//        } else {
+//            throw new RuntimeException(context.getClass().getSimpleName() +" must implement " +SlidingDrawerContainer.class.getSimpleName());
+//        }
+//    }
 
     @SafeVarargs
     private final void setupViewPager(View view, TabLayout tabs, Pair<Fragment, String>... fragments) {
@@ -110,27 +96,5 @@ public class RootFragment extends Fragment implements SlidingDrawer.OnSlideListe
         tabs.setupWithViewPager(viewPager);
     }
 
-    @Override
-    public void onSlide(SlidingDrawer slidingDrawer, float currentSlide) {
-        expandedView.setAlpha(currentSlide);
 
-        if(currentSlide == 0) {
-            collapsedView.setVisibility(View.VISIBLE);
-            expandedView.setVisibility(View.INVISIBLE);
-
-            slidingDrawer.setDragView(collapsedView);
-        }else if (currentSlide == 1) {
-            collapsedView.setVisibility(View.INVISIBLE);
-            expandedView.setVisibility(View.VISIBLE);
-
-            slidingDrawer.setDragView(tabLayout);
-        } else {
-            collapsedView.setVisibility(View.VISIBLE);
-            expandedView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public interface SlidingDrawerContainer {
-        void setDragView(View view);
-    }
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginLeft="16dp">
+    <FrameLayout
+        android:id="@+id/frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#4c4cf9">
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="38dp" />
+        <TextView
+            android:id="@+id/tvInitial"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:padding="2dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:text="M" />
+    </FrameLayout>
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_toRightOf="@+id/frame"
+        android:layout_alignTop="@+id/frame"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:layout_marginLeft="14dp"
+        android:text="Megan Smith"/>
+    <ImageView
+        android:id="@+id/ivCall"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:src="@drawable/incoming_call"
+        android:layout_below="@+id/tvName"
+        android:layout_toRightOf="@+id/frame"
+        android:layout_toEndOf="@+id/frame" />
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:padding="4dp"
+        android:drawingCacheQuality="high"
+        android:layout_marginLeft="25dp"
+        android:src="@drawable/plus"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_alignParentTop="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_toRightOf="@+id/ivCall"
+        android:layout_below="@+id/tvName"
+        android:textColor="#68686d"
+        android:textSize="14sp"
+        android:layout_marginLeft="6dp"
+        android:text="Mobile: 8483773243, 1 hour ago"
+        android:id="@+id/textView" />
+</RelativeLayout>
